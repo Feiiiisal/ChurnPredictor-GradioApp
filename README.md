@@ -1,42 +1,64 @@
-# ChurnPredictor-GradioApp
+# Customer Churn Predictor (Gradio)
 
-# IntuitiveChurnPredictor
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![Python](https://img.shields.io/badge/python-3.8%2B-blue)
+![Gradio](https://img.shields.io/badge/UI-Gradio-orange)
+![scikit-learn](https://img.shields.io/badge/model-Random%20Forest-green)
 
-Welcome to IntuitiveChurnPredictor! This repository is dedicated to making Machine Learning models accessible and user-friendly for everyone, leveraging the amazing capabilities of Gradio to deploy our churn prediction model in a sleek, interactive web interface.
+A small web app that predicts whether a telecom customer is likely to **churn**
+(leave) or **continue**, from 19 inputs such as contract type, services, monthly
+charges and tenure. The interface is built with [Gradio](https://gradio.app), so
+anyone can try the model without writing code.
 
-##  Introduction
-The mission behind IntuitiveChurnPredictor is simple: to bring machine learning closer to non-tech-savvy individuals and businesses that wish to utilize the power of ML without diving into the technicalities. Here, we explore Gradio, a Python library that lets developers rapidly create UIs for their ML models, and apply it to a practical use case - a churn prediction model. The user-friendly interface enables users to easily input customer attributes, obtain, and interpret churn predictions with just a few clicks.
+## How it works
 
-##  Features
-- **Intuitive UI**: Engage with a straightforward and user-friendly interface, designed with simplicity and efficiency in mind.
-- **Swift Interactions**: Obtain quick churn predictions without dealing with code or technical details.
-- **Accessible to All**: Tailored for both technical and non-technical users to explore and utilize ML capabilities.
-- **Collaboration-Friendly**: Easily shareable application for collaborative testing and exploration.
+1. **Enter customer details**: demographics, phone and internet services, add-ons
+   (security, backup, tech support, streaming), contract, billing method, monthly
+   and total charges, and tenure in months.
+2. **Click Predict.** The app turns tenure into a tenure group, applies the saved
+   preprocessing pipeline (one-hot encoding and scaling) and runs a pre-trained
+   **Random Forest** classifier.
+3. **Read the result**: "This customer is likely to be churned." or "This
+   customer is likely to continue."
 
-##  Setup & Usage
-### Requirements
-- Python
-- Gradio
-- Scikit-learn (or your ML framework of choice)
+The model and its training notebook live in the companion project
+[Customer-Churn-Prediction-Analysis](https://github.com/Feiiiisal/Customer-Churn-Prediction-Analysis).
 
-##  How It Works
-### Step 1: Input Customer Data
-Through the intuitive Gradio interface, input various customer attributes to inform the churn prediction.
+## Project layout
 
-### Step 2: Obtain & Interpret Predictions
-Hit the "Predict" button and instantly retrieve churn predictions, presented in a comprehensible and straightforward manner.
+```
+app2.py                           Gradio app (inputs, preprocessing, prediction)
+Loaded Models/
+  churn_model.pkl                 Trained Random Forest classifier
+  churn_pipeline.pkl              Saved preprocessing pipeline
+requirements.txt
+```
 
-### Step 3: Share & Explore
-Use the shareable link to collaborate with team members, clients, or stakeholders, inviting them to explore and utilize the churn predictor.
+## Setup and run
 
-##  Behind the Scenes
-Utilizing Gradio, we've encapsulated a pre-trained Random Forest Classifier model which predicts customer churn based on various input attributes. Data preprocessing and model prediction mechanisms operate behind the scenes, delivering you an accessible and visually comprehensible outcome.
+```bash
+python -m venv venv
+source venv/bin/activate          # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
 
-##  Contributing
-Your contributions are always welcome! Feel free to fork the repository and submit a pull request whenever you’re ready to make a contribution.
+The app opens its model files from the current folder, so start it from inside
+`Loaded Models`:
 
-##  License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+```bash
+cd "Loaded Models"
+python ../app2.py
+```
 
-##  Acknowledgements
-A special thank you to Gradio for making ML model deployment and interaction seamless and accessible to developers of all skill levels.
+`app2.py` ends with `launch(share=True)`, which also creates a temporary public
+link. Change it to `launch()` if you only want the app on your own machine.
+
+**Note on versions:** `requirements.txt` pins older library versions
+(for example `gradio==2.3.0` and `scikit-learn==0.24.2`). Pickled scikit-learn
+models can fail to load on other versions, so use a dedicated virtual
+environment with these pins (an older Python such as 3.8 or 3.9 is the safest
+choice).
+
+## License
+
+[MIT](LICENSE)
